@@ -20,7 +20,7 @@ var players = {
 		{nick:			"carrot",
 		detective:	true,
 		angel:			false},
-		{nick:			"dount",
+		{nick:			"donut",
 		detective:	false,
 		angel:			true},
 		{nick:			"elephant",
@@ -96,15 +96,20 @@ function repeatMessage(message) {
 function accusePlayer(message) {
 	console.log("Accusing player: " + message);
 	if (confirmPlayerName(message, mafia)) {
-		console.log(message + " Found");
-	}
+		console.log(message + " accused and was a mafia member.");
+	} else if (confirmPlayerName(message, innocent)) {
+		console.log(message + " accused and was innocent.");
+	} else if (confirmPlayerName(message, dead)) {
+		console.log(message + " cannot be accused. " + message + " is already dead.");
+	} else console.log(message + " not found.");
 }
 
 function confirmPlayerName(nickCheck, side, role) {
 	for (i = 0; i < side.length; i++) {
-		console.log(side[i].nick);
+		console.log("CHECKING: " + side[i].nick);
 		if (side[i].nick == nickCheck) {
 			return true;
 		}
 	}
+	return false;
 }
