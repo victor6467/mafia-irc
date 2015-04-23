@@ -1,4 +1,5 @@
 var IRC = require("internet-relay-chat");
+var fs = require("fs");
 //START EDITS HERE//
 var bot = new IRC({
 	"username": "MafiaBot",
@@ -11,33 +12,57 @@ var specialChar = "-";
 
 var players = {
 	mafia: [
-		{nick: 			"apple",
-		godfather: 	false},
-		{nick: 			"banana",
-		godfather: 	true}
+		{
+			nick: 			"apple",
+			godfather: 	false,
+			voted: 			false
+		},
+		{
+			nick: 			"banana",
+			godfather: 	true,
+			voted: 			false
+		}
 	],
 	innocent: [
-		{nick:			"carrot",
-		detective:	true,
-		angel:			false},
-		{nick:			"donut",
-		detective:	false,
-		angel:			true},
-		{nick:			"elephant",
-		detective:	false,
-		angel:			false},
-		{nick:			"freedom",
-		detective:	false,
-		angel:			false},
-		{nick:			"ginger",
-		detective:	false,
-		angel:			false}
+		{
+			nick:				"carrot",
+			detective:	true,
+			angel:			false,
+			voted: 			false
+		},
+		{
+			nick:				"donut",
+			detective:	false,
+			angel:			true,
+			voted: 			false
+		},
+		{
+			nick:				"elephant",
+			detective:	false,
+			angel:			false,
+			voted:  		false
+		},
+		{
+			nick:				"freedom",
+			detective:	false,
+			angel:			false,
+			voted: 			false
+		},
+		{
+			nick:				"ginger",
+			detective:	false,
+			angel:			false,
+			voted: 			false
+		}
 	],
 	dead: [
-		{nick: 			"honey",
-		mafia: 			true},
-		{nick: 			"infared",
-		mafia: 			false}
+		{
+			nick: 			"honey",
+			mafia: 			true},
+		{
+			nick: 			"infared",
+			mafia: 			false
+		}
 	]
 };
 var mafia = players.mafia;
@@ -80,6 +105,11 @@ bot.on("message", function(sender, channel, message) {
 			case "accuse":
 				if (adminCommand || commandAccess == "detective") {
 					accusePlayer(message.split(" ", 2)[1]);
+				}
+				break;
+			case "vote":
+				if (adminCommand || commandAccess == "player") {
+					//Vote for player death
 				}
 				break;
 			default:
