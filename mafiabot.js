@@ -68,6 +68,7 @@ var players = {
 var mafia = players.mafia;
 var innocent = players.innocent;
 var dead = players.dead;
+var day = true;
 
 //Start of IRC Server Connection Stuff
 bot.on("connect", function() {
@@ -108,8 +109,11 @@ bot.on("message", function(sender, channel, message) {
 				}
 				break;
 			case "vote":
-				if (adminCommand || commandAccess == "player") {
-					//Vote for player death
+				//Vote for Player Death
+				break;
+			case "players":
+				if (adminCommand) {
+					console.log(players);
 				}
 				break;
 			default:
@@ -123,23 +127,57 @@ function repeatMessage(message) {
 	bot.message(mainChannel, message);
 }
 
-function accusePlayer(message) {
-	console.log("Accusing player: " + message);
-	if (confirmPlayerName(message, mafia)) {
-		console.log(message + " accused and was a mafia member.");
-	} else if (confirmPlayerName(message, innocent)) {
-		console.log(message + " accused and was innocent.");
-	} else if (confirmPlayerName(message, dead)) {
-		console.log(message + " cannot be accused. " + message + " is already dead.");
-	} else console.log(message + " not found.");
+function accusePlayer(player) {
+	console.log("Accusing player: " + player);
+	switch (findPlayerTeam(player)) {
+		case "mafia":
+			console.log(player + " accused and was a mafia member.");
+			killPlayer(player, "accusation");
+			break;
+		case "innocent":
+			console.log(player + " accused and was innocent.");
+			killPlayer(player, "accusation");
+			break;
+		case "dead":
+			console.log(player + " is already dead and cannot be accused.");
+			break;
+		default:
+			console.log("Player " + player + " not found.");
+	}
 }
 
-function confirmPlayerName(nickCheck, side, role) {
-	for (i = 0; i < side.length; i++) {
-		console.log("CHECKING: " + side[i].nick);
-		if (side[i].nick == nickCheck) {
-			return true;
+function findPlayerTeam(player, number) {
+	for (i = 0; i < mafia.length; i++) {
+		console.log("FINDING: " + mafia[i].nick);
+		if (mafia[i].nick == player) {
+			if (number) return i;
+			else return "mafia";
+		}
+	}
+	for (i = 0; i < innocent.length; i++) {
+		console.log("FINDING: " + innocent[i].nick);
+		if (innocent[i].nick == player) {
+			if (number) return i;
+			else return "innocent";
+		}
+	}
+	for (i = 0; i < dead.length; i++) {
+		console.log("FINDING: " + dead[i].nick);
+		if (dead[i].nick == player) {
+			if (number) return i;
+			else return "dead";
 		}
 	}
 	return false;
+}
+
+function killPlayer(player, cause) {
+	if (findPlayerTeam(player) == "mafia") {
+		dead.push({nick:player, mafia:true});
+		mafia.splice(findPlayerTeam(player, true), 1);
+	}
+	if (findPlayerTeam(player) == "innocent") {
+		dead.push({nick:player, mafia:false});
+		innocent.splice(findPlayerTeam(player, true), 1);
+	}
 }
