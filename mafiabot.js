@@ -8,7 +8,11 @@ var bot = new IRC({
 var mainChannel = "";
 var admin = "";
 var specialChar = "-";
+var MAFIA_STRENGTH = 0.6; //Default 0.6 //Higher means more mafia
 //STOP EDITING//
+
+var signups = [
+];
 
 var players = {
 	mafia: [
@@ -103,6 +107,18 @@ bot.on("message", function(sender, channel, message) {
 					repeatMessage(message.split(" ", 2)[1]);
 				}
 				break;
+			case "join":
+				if (commandAccess == "none") {
+					joinGame(sender.nick);
+				}
+				break;
+			case "start":
+				if (adminCommand) {
+					if (startGame() == true) {
+						console.log("Players' roles delivered. The game begins!");
+					}
+				}
+				break;
 			case "accuse":
 				if (adminCommand || commandAccess == "detective") {
 					accusePlayer(message.split(" ", 2)[1]);
@@ -180,4 +196,22 @@ function killPlayer(player, cause) {
 		dead.push({nick:player, mafia:false});
 		innocent.splice(findPlayerTeam(player, true), 1);
 	}
+}
+
+function joinGame(player) {
+	signups.push(player);
+	console.log(player);
+}
+
+function startGame() {
+	var numPlayers = signups.length;
+	if (numPlayers <= 3) {
+		console.log("Not enough players. At least 4 players are required.");
+		return false;
+	}
+	var numMafia = Math.floor(Math.sqrt(numPlayers) * MAFIA_STRENGTH);
+	var godfatherExists = numMafia >= 3 ? true : false;
+	//Determine number of roles if any
+	//Select players for mafia
+	//Select players to have modifiers
 }
