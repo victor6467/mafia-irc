@@ -8,11 +8,16 @@ var bot = new IRC({
 var mainChannel = "";
 var admin = "";
 var specialChar = "-";
-var MAFIA_STRENGTH = 0.6; //Default 0.6 //Higher means more mafia
-//STOP EDITING//
+var MAFIA_STRENGTH = 0.75; //Default 0.75 //Higher means more mafia
+var roles = {
+	//Innocent Roles
+	detective: true,
+	angel: true,
 
-var signups = [
-];
+	//Mafia Roles
+	godfather: true
+};
+//STOP EDITING//
 
 var players = {
 	mafia: [
@@ -67,11 +72,17 @@ var players = {
 			nick: 			"infared",
 			mafia: 			false
 		}
+	],
+	unassigned: [
+		{nick: 			"jelly"},
+		{nick: 			"kangaroo"}
 	]
 };
+
 var mafia = players.mafia;
 var innocent = players.innocent;
 var dead = players.dead;
+var unassigned = players.unassigned;
 var day = true;
 
 //Start of IRC Server Connection Stuff
@@ -108,13 +119,13 @@ bot.on("message", function(sender, channel, message) {
 				}
 				break;
 			case "join":
-				if (commandAccess == "none") {
+				if (true) {
 					joinGame(sender.nick);
 				}
 				break;
 			case "start":
 				if (adminCommand) {
-					if (startGame() == true) {
+					if (startGame()) {
 						console.log("Players' roles delivered. The game begins!");
 					}
 				}
@@ -184,6 +195,13 @@ function findPlayerTeam(player, number) {
 			else return "dead";
 		}
 	}
+	for (i = 0; i < unassigned.length; i++) {
+		console.log("FINDING: " + unassigned[i].nick);
+		if (unassigned[i].nick == player) {
+			if (number) return i;
+			else return "unassigned";
+		}
+	}
 	return false;
 }
 
@@ -199,12 +217,16 @@ function killPlayer(player, cause) {
 }
 
 function joinGame(player) {
-	signups.push(player);
+	if (findPlayerTeam(player) == "unassigned") {
+			console.log(player + " cannot join the game twice!");
+		return;
+	}
+	unassigned.push({nick:player});
 	console.log(player);
 }
 
 function startGame() {
-	var numPlayers = signups.length;
+	var numPlayers = unassigned.length;
 	if (numPlayers <= 3) {
 		console.log("Not enough players. At least 4 players are required.");
 		return false;
@@ -214,4 +236,5 @@ function startGame() {
 	//Determine number of roles if any
 	//Select players for mafia
 	//Select players to have modifiers
+	return true;
 }
