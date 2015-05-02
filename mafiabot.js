@@ -209,11 +209,14 @@ function killPlayer(player, cause) {
 	if (findPlayerTeam(player) == "mafia") {
 		dead.push({nick:player, mafia:true});
 		mafia.splice(findPlayerTeam(player, true), 1);
+		return true;
 	}
 	if (findPlayerTeam(player) == "innocent") {
 		dead.push({nick:player, mafia:false});
 		innocent.splice(findPlayerTeam(player, true), 1);
+		return true;
 	}
+	return false;
 }
 
 function joinGame(player) {
@@ -232,9 +235,26 @@ function startGame() {
 		return false;
 	}
 	var numMafia = Math.floor(Math.sqrt(numPlayers) * MAFIA_STRENGTH);
-	var godfatherExists = numMafia >= 3 ? true : false;
-	//Determine number of roles if any
-	//Select players for mafia
+
+	for (i = 0; i < numMafia; i++) {
+		var chosenMafiaNum = Math.floor(Math.random() * (numPlayers - i));
+		mafia.push({nick:(unassigned[chosenMafiaNum].nick),
+			godfather: false,
+			voted: false
+		});
+		unassigned.splice(chosenMafiaNum, 1);
+	}
+
+	numPlayers = unassigned.length;
+	for (i = 0; i < numPlayers; i++) {
+		innocent.push({nick:(unassigned[0].nick),
+			detective: false,
+			angel: false,
+			voted: false
+		});
+		unassigned.splice(0, 1);
+	}
+	unassigned = [];
 	//Select players to have modifiers
 	return true;
 }
