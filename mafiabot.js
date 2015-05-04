@@ -118,17 +118,18 @@ bot.on("message", function(sender, channel, message) {
 	}
 
 	if (message.charAt(0) == specialChar) {
-		var command = message.split(" ")[0];
-		switch (command.substring(1)) {
+		var messageSplit = message.indexOf(" ");
+		var command = message.substr(1, index);
+		var parameters = message.substr(index + 1);
+
+		switch (command) {
 			case "repeat":
 				if (adminCommand) {
-					repeatMessage(message.split(" ", 2)[1]);
+					repeatMessage(parameters);
 				}
 				break;
 			case "join":
-				if (true) {
-					joinGame(sender.nick);
-				}
+				joinGame(sender.nick);
 				break;
 			case "start":
 				if (adminCommand) {
@@ -139,7 +140,7 @@ bot.on("message", function(sender, channel, message) {
 				break;
 			case "accuse":
 				if (adminCommand || commandAccess == "detective") {
-					accusePlayer(message.split(" ", 2)[1]);
+					accusePlayer(parameters);
 				}
 				break;
 			case "vote":
@@ -151,7 +152,7 @@ bot.on("message", function(sender, channel, message) {
 				}
 				break;
 			default:
-				bot.message(mainChannel, "Unknown command");
+				console.log("Unknown command from " + sender.nick + ": " + message);
 		}
 	}
 });
