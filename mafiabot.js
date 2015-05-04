@@ -24,11 +24,13 @@ var players = {
 		{
 			nick: 			"apple",
 			godfather: 	false,
+			protected:	false,
 			voted: 			false
 		},
 		{
 			nick: 			"banana",
 			godfather: 	true,
+			protected:	false,
 			voted: 			false
 		}
 	],
@@ -37,30 +39,35 @@ var players = {
 			nick:				"carrot",
 			detective:	true,
 			angel:			false,
+			protected:	false,
 			voted: 			false
 		},
 		{
 			nick:				"donut",
 			detective:	false,
 			angel:			true,
+			protected:	false,
 			voted: 			false
 		},
 		{
 			nick:				"elephant",
 			detective:	false,
 			angel:			false,
+			protected:	false,
 			voted:  		false
 		},
 		{
 			nick:				"freedom",
 			detective:	false,
 			angel:			false,
+			protected:	false,
 			voted: 			false
 		},
 		{
 			nick:				"ginger",
 			detective:	false,
 			angel:			false,
+			protected:	false,
 			voted: 			false
 		}
 	],
@@ -240,6 +247,7 @@ function startGame() {
 		var chosenMafiaNum = Math.floor(Math.random() * (numPlayers - i));
 		mafia.push({nick:(unassigned[chosenMafiaNum].nick),
 			godfather: false,
+			protected:	false,
 			voted: false
 		});
 		unassigned.splice(chosenMafiaNum, 1);
@@ -250,6 +258,7 @@ function startGame() {
 		innocent.push({nick:(unassigned[0].nick),
 			detective: false,
 			angel: false,
+			protected:	false,
 			voted: false
 		});
 		unassigned.splice(0, 1);
