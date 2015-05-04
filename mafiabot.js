@@ -119,8 +119,9 @@ bot.on("message", function(sender, channel, message) {
 
 	if (message.charAt(0) == specialChar) {
 		var messageSplit = message.indexOf(" ");
-		var command = message.substr(1, index);
-		var parameters = message.substr(index + 1);
+		var command = message.substr(1, messageSplit - 1);
+		var parameters = message.substr(messageSplit + 1);
+		if (messageSplit < 0) command = message.substr(1);
 
 		switch (command) {
 			case "repeat":
@@ -133,7 +134,7 @@ bot.on("message", function(sender, channel, message) {
 				break;
 			case "start":
 				if (adminCommand) {
-					if (startGame()) {
+					if (startGame(parameters)) {
 						console.log("Players' roles delivered. The game begins!");
 					}
 				}
@@ -236,7 +237,7 @@ function joinGame(player) {
 	console.log(player);
 }
 
-function startGame() {
+function startGame(parameters) {
 	var numPlayers = unassigned.length;
 	if (numPlayers <= 3) {
 		console.log("Not enough players. At least 4 players are required.");
