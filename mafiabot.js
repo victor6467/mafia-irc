@@ -1,23 +1,13 @@
 var IRC = require("internet-relay-chat");
 var fs = require("fs");
-//START EDITS HERE//
-var bot = new IRC({
-	"username": "MafiaBot",
-	"nick": "MafiaBot"
-});
-var mainChannel = "";
-var admin = "";
-var specialChar = "-";
-var MAFIA_STRENGTH = 0.75; //Default 0.75 //Higher means more mafia
-var roles = {
-	//Innocent Roles
-	detective: true,
-	angel: true,
+var settings = require('./settings');
 
-	//Mafia Roles
-	godfather: true
-};
-//STOP EDITING//
+var bot = new IRC(settings.botDetails);
+var mainChannel = settings.mainChannel;
+var admin = settings.admin;
+var specialChar = settings.specialChar;
+var MAFIA_STRENGTH = settings.MAFIA_STRENGTH;
+var roles = settings.roles;
 
 var players = {
 	mafia: [
