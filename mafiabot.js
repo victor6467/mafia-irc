@@ -7,7 +7,8 @@ var mainChannel = settings.mainChannel;
 var admin = settings.admin;
 var specialChar = settings.specialChar;
 var MAFIA_STRENGTH = settings.MAFIA_STRENGTH;
-var roles = settings.roles;
+var innocentRoles = settings.innocentRoles;
+var mafiaRoles = settings.mafiaRoles;
 
 var players = {
 	mafia: [
@@ -256,6 +257,15 @@ function startGame(parameters) {
 		unassigned.splice(0, 1);
 	}
 	unassigned = [];
-	//Select players to have modifiers
-	return true;
+
+	for (var role in innocentRoles) {
+		if (innocentRoles.hasOwnProperty(role) && innocentRoles[role]) {
+			innocent[Math.floor(Math.random() * (numPlayers))].role = true;
+		}
+	}
+	for (role in mafiaRoles) {
+		if (mafiaRoles.hasOwnProperty(role) && mafiaRoles[role]) {
+			mafia[Math.floor(Math.random() * (numPlayers))].role = true;
+		}
+	}
 }
