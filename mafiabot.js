@@ -1,6 +1,9 @@
 var IRC = require("internet-relay-chat");
 var fs = require("fs");
-var settings = require('./settings');
+var settings = require("./settings");
+if (fs.existsSync("settings_dev.js")) {
+	settings = require("./settings_dev");
+}
 
 var bot = new IRC(settings.botDetails);
 var mainChannel = settings.mainChannel;

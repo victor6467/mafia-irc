@@ -11,10 +11,10 @@ module.exports = {
   innocentRoles: {
     detective: true,
     angel: true
-  }
+  },
   mafiaRoles: {
     godfather: true
-  }
+  },
   roles: {
   	//Innocent Roles
   	detective: [true, "innocent"],
