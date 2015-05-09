@@ -14,67 +14,18 @@ var innocentRoles = settings.innocentRoles;
 var mafiaRoles = settings.mafiaRoles;
 
 var players = {
-	mafia: [
-		{
-			nick: 			"apple",
-			godfather: 	false,
-			protected:	false,
-			voted: 			false
-		},
-		{
-			nick: 			"banana",
-			godfather: 	true,
-			protected:	false,
-			voted: 			false
-		}
-	],
-	innocent: [
-		{
-			nick:				"carrot",
-			detective:	true,
-			angel:			false,
-			protected:	false,
-			voted: 			false
-		},
-		{
-			nick:				"donut",
-			detective:	false,
-			angel:			true,
-			protected:	false,
-			voted: 			false
-		},
-		{
-			nick:				"elephant",
-			detective:	false,
-			angel:			false,
-			protected:	false,
-			voted:  		false
-		},
-		{
-			nick:				"freedom",
-			detective:	false,
-			angel:			false,
-			protected:	false,
-			voted: 			false
-		},
-		{
-			nick:				"ginger",
-			detective:	false,
-			angel:			false,
-			protected:	false,
-			voted: 			false
-		}
-	],
-	dead: [
-		{
-			nick: 			"honey",
-			mafia: 			true},
-		{
-			nick: 			"infared",
-			mafia: 			false
-		}
-	],
+	mafia: [],
+	innocent: [],
+	dead: [],
 	unassigned: [
+		{nick: 			"apple"},
+		{nick: 			"banana"},
+		{nick: 			"carrot"},
+		{nick: 			"donut"},
+		{nick: 			"elephant"},
+		{nick: 			"freedom"},
+		{nick: 			"ginger"},
+		{nick: 			"honey"},
 		{nick: 			"jelly"},
 		{nick: 			"kangaroo"}
 	]
@@ -263,12 +214,12 @@ function startGame(parameters) {
 
 	for (var role in innocentRoles) {
 		if (innocentRoles.hasOwnProperty(role) && innocentRoles[role]) {
-			innocent[Math.floor(Math.random() * (numPlayers))].role = true;
+			innocent[Math.floor(Math.random() * (numPlayers))][role] = true;
 		}
 	}
 	for (role in mafiaRoles) {
 		if (mafiaRoles.hasOwnProperty(role) && mafiaRoles[role]) {
-			mafia[Math.floor(Math.random() * (numPlayers))].role = true;
+			mafia[Math.floor(Math.random() * (numMafia))][role] = true;
 		}
 	}
 }
