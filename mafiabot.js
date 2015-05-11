@@ -90,7 +90,7 @@ bot.on("message", function(sender, channel, message) {
 				}
 				break;
 			case "vote":
-				//Vote for Player Death
+				submitVote(parameters, sender.nick);
 				break;
 			case "players":
 				if (adminCommand) {
@@ -195,7 +195,8 @@ function startGame(parameters) {
 		mafia.push({nick:(unassigned[chosenMafiaNum].nick),
 			godfather: false,
 			protected:	false,
-			voted: false
+			voted: false,
+			numVotes: 0
 		});
 		unassigned.splice(chosenMafiaNum, 1);
 	}
@@ -206,7 +207,8 @@ function startGame(parameters) {
 			detective: false,
 			angel: false,
 			protected:	false,
-			voted: false
+			voted: false,
+			numVotes: 0
 		});
 		unassigned.splice(0, 1);
 	}
@@ -221,5 +223,35 @@ function startGame(parameters) {
 		if (mafiaRoles.hasOwnProperty(role) && mafiaRoles[role]) {
 			mafia[Math.floor(Math.random() * (numMafia))][role] = true;
 		}
+	}
+	return true;
+}
+
+function submitVote(player, voter) {
+	var playerTeam = findPlayerTeam(player);
+	var playerNum;
+	var voterTeam;
+	var voterNum;
+	if (playerTeam == "mafia" || playerTeam == "innocent") {
+		playerNum = findPlayerTeam(player, true);
+		voterTeam = findPlayerTeam(voter);
+		voterNum = findPlayerTeam(voter, true);
+		if (!players[voterTeam][voterNum].voted) {
+			players[playerTeam][playerNum].numVotes++;
+			players[voterTeam][voterNum].voted = true;
+			return true;
+		} else {
+			console.log(voter + " already voted!");
+			return false;
+		}
+	} else if (playerTeam == "dead") {
+		console.log("You can't vote for dead players!");
+		return false;
+	} else if (playerTeam == "unassigned") {
+		console.log(player + " is not in the game!");
+		return false;
+	} else {
+		console.log(player + "not found.");
+		return false;
 	}
 }
