@@ -7,6 +7,7 @@ if (fs.existsSync("settings_dev.js")) {
 
 var bot = new IRC(settings.botDetails);
 var mainChannel = settings.mainChannel;
+var mafiaChannel = settings.mafiaChannel;
 var admin = settings.admin;
 var specialChar = settings.specialChar;
 var MAFIA_STRENGTH = settings.MAFIA_STRENGTH;
@@ -46,6 +47,7 @@ bot.connect();
 
 bot.on("registered", function() {
   bot.join(mainChannel);
+	bot.join(mafiaChannel);
 	console.log("Bot registered");
 });
 

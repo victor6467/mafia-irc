@@ -4,6 +4,7 @@ module.exports = {
     "nick": "MafiaBot"
   },
   mainChannel: "",
+  mafiaChannel: "",
   admin: "",
   specialChar: "-",
 
