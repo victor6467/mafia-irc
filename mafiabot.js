@@ -32,6 +32,29 @@ var players = {
 	]
 };
 
+var commands = {
+	repeat: function(parameters) {
+		repeatMessage(parameters);
+	},
+	join: function(parameters, senderNick) {
+		joinGame(senderNick);
+	},
+	start: function(parameters) {
+			if (startGame(parameters)) {
+				console.log("Players' roles delivered. The game begins!");
+				}
+		},
+	accuse: function(parameters) {
+			accusePlayer(parameters);
+	},
+	vote: function(parameters, senderNick) {
+		submitVote(parameters, senderNick);
+	},
+	players: function() {
+			console.log(players);
+	}
+};
+
 var mafia = players.mafia;
 var innocent = players.innocent;
 var dead = players.dead;
@@ -70,37 +93,10 @@ bot.on("message", function(sender, channel, message) {
 		var parameters = message.substr(messageSplit + 1);
 		if (messageSplit < 0) command = message.substr(1);
 
-		switch (command) {
-			case "repeat":
-				if (adminCommand) {
-					repeatMessage(parameters);
-				}
-				break;
-			case "join":
-				joinGame(sender.nick);
-				break;
-			case "start":
-				if (adminCommand) {
-					if (startGame(parameters)) {
-						console.log("Players' roles delivered. The game begins!");
-					}
-				}
-				break;
-			case "accuse":
-				if (adminCommand || commandAccess == "detective") {
-					accusePlayer(parameters);
-				}
-				break;
-			case "vote":
-				submitVote(parameters, sender.nick);
-				break;
-			case "players":
-				if (adminCommand) {
-					console.log(players);
-				}
-				break;
-			default:
-				console.log("Unknown command from " + sender.nick + ": " + message);
+		if (commands[command] !== undefined) {
+			commands[command](parameters, sender.nick);
+		} else {
+			console.log("Unknown command from " + sender.nick + ": " + message);
 		}
 	}
 });
