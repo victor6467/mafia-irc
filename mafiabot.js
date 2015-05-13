@@ -191,6 +191,7 @@ function startGame(parameters) {
 		return false;
 	}
 	var numMafia = Math.floor(Math.sqrt(numPlayers) * MAFIA_STRENGTH);
+	var numInnocent = numPlayers - numMafia;
 
 	for (i = 0; i < numMafia; i++) {
 		var chosenMafiaNum = Math.floor(Math.random() * (numPlayers - i));
@@ -203,8 +204,7 @@ function startGame(parameters) {
 		unassigned.splice(chosenMafiaNum, 1);
 	}
 
-	numPlayers = unassigned.length;
-	for (i = 0; i < numPlayers; i++) {
+	for (i = 0; i < numInnocent; i++) {
 		innocent.push({nick:(unassigned[0].nick),
 			detective: false,
 			angel: false,
