@@ -13,6 +13,8 @@ var specialChar = settings.specialChar;
 var MAFIA_STRENGTH = settings.MAFIA_STRENGTH;
 var innocentRoles = settings.innocentRoles;
 var mafiaRoles = settings.mafiaRoles;
+var day = true;
+var dayNum = 0;
 
 var players = {
 	mafia: [],
@@ -40,18 +42,21 @@ var commands = {
 		joinGame(senderNick);
 	},
 	start: function(parameters) {
-			if (startGame(parameters)) {
-				console.log("Players' roles delivered. The game begins!");
-				}
-		},
+		if (startGame(parameters)) {
+			console.log("Players' roles delivered. The game begins!");
+		}
+	},
 	accuse: function(parameters) {
-			accusePlayer(parameters);
+		accusePlayer(parameters);
 	},
 	vote: function(parameters, senderNick) {
 		submitVote(parameters, senderNick);
 	},
 	players: function() {
-			console.log(players);
+		console.log(players);
+	},
+	day: function() {
+		changeDay();
 	}
 };
 
@@ -59,7 +64,6 @@ var mafia = players.mafia;
 var innocent = players.innocent;
 var dead = players.dead;
 var unassigned = players.unassigned;
-var day = true;
 
 //Start of IRC Server Connection Stuff
 bot.on("connect", function() {
@@ -251,5 +255,12 @@ function submitVote(player, voter) {
 	} else {
 		console.log(player + "not found.");
 		return false;
+	}
+}
+
+function changeDay() {
+	day = !day;
+	if (day === true) {
+		dayNum++;
 	}
 }
