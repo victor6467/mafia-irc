@@ -230,6 +230,10 @@ function startGame(parameters) {
 }
 
 function submitVote(player, voter) {
+	if (day === false) {
+		console.log("You can't vote at night!");
+		return false;
+	}
 	var playerTeam = findPlayerTeam(player);
 	var playerNum;
 	var voterTeam;
