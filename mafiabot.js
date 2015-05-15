@@ -260,6 +260,29 @@ function submitVote(player, voter) {
 
 function changeDay() {
 	day = !day;
+
+	//Transition from day to night
+	if (day === false) {
+		var maxVotes = 0;
+		var votedPlayer;
+		for (i = 0; i < innocent.length; i++) {
+			if (innocent[i].numVotes > maxVotes) {
+				votedPlayer = innocent[i].nick;
+			}
+		}
+		for (i = 0; i < mafia.length; i++) {
+			if (mafia[i].numVotes > maxVotes) {
+				votedPlayer = mafia[i].nick;
+			}
+		}
+		if (votedPlayer !== undefined) {
+			console.log(votedPlayer + " has been voted to be killed!");
+			console.log(votedPlayer + " was " + findPlayerTeam(votedPlayer));
+			killPlayer(votedPlayer);
+		}
+	}
+
+	//Transition from night to day
 	if (day === true) {
 		dayNum++;
 	}
