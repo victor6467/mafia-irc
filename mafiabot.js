@@ -218,7 +218,7 @@ function startGame(parameters) {
 
 	for (var role in innocentRoles) {
 		if (innocentRoles.hasOwnProperty(role) && innocentRoles[role]) {
-			innocent[Math.floor(Math.random() * (numPlayers))][role] = true;
+			innocent[Math.floor(Math.random() * (numInnocent))][role] = true;
 		}
 	}
 	for (role in mafiaRoles) {
