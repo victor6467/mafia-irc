@@ -49,8 +49,8 @@ var commands = {
 	accuse: function(parameters) {
 		accusePlayer(parameters);
 	},
-	vote: function(parameters, senderNick) {
-		submitVote(parameters, senderNick);
+	vote: function(parameters, senderNick, channel) {
+		submitVote(parameters, senderNick, channel);
 	},
 	players: function() {
 		console.log(players);
@@ -98,7 +98,7 @@ bot.on("message", function(sender, channel, message) {
 		if (messageSplit < 0) command = message.substr(1);
 
 		if (commands[command] !== undefined) {
-			commands[command](parameters, sender.nick);
+			commands[command](parameters, sender.nick, channel);
 		} else {
 			console.log("Unknown command from " + sender.nick + ": " + message);
 		}
@@ -229,7 +229,15 @@ function startGame(parameters) {
 	return true;
 }
 
-function submitVote(player, voter) {
+function submitVote(player, voter, channel) {
+	if (channel == mainChannel) {
+		return dayVote(player, voter);
+	} else if (channel == mafiaChannel) {
+		return nightVote(player, voter);
+	}
+}
+
+function dayVote(player, voter) {
 	if (day === false) {
 		console.log("You can't vote at night!");
 		return false;
@@ -250,6 +258,42 @@ function submitVote(player, voter) {
 			console.log(voter + " already voted!");
 			return false;
 		}
+	} else if (playerTeam == "dead") {
+		console.log("You can't vote for dead players!");
+		return false;
+	} else if (playerTeam == "unassigned") {
+		console.log(player + " is not in the game!");
+		return false;
+	} else {
+		console.log(player + "not found.");
+		return false;
+	}
+}
+
+function nightVote(player, voter) {
+	if (day === true) {
+		console.log("You can only vote at night!");
+		return false;
+	}
+	var playerTeam = findPlayerTeam(player);
+	var playerNum;
+	var voterTeam;
+	var voterNum;
+	if (playerTeam == "innocent") {
+		playerNum = findPlayerTeam(player, true);
+		voterTeam = findPlayerTeam(voter);
+		voterNum = findPlayerTeam(voter, true);
+		if (!players[voterTeam][voterNum].voted) {
+			players[playerTeam][playerNum].numVotes++;
+			players[voterTeam][voterNum].voted = true;
+			return true;
+		} else {
+			console.log(voter + " already voted!");
+			return false;
+		}
+	} else if (playerTeam == "mafia") {
+		console.log("You can't vote for fellow mafia!");
+		return false;
 	} else if (playerTeam == "dead") {
 		console.log("You can't vote for dead players!");
 		return false;
