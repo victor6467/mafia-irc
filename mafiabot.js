@@ -15,6 +15,8 @@ var innocentRoles = settings.innocentRoles;
 var mafiaRoles = settings.mafiaRoles;
 var day = true;
 var dayNum = 0;
+var mimickedPlayerNick;
+var adminNick;
 
 var players = {
 	mafia: [],
@@ -35,9 +37,6 @@ var players = {
 };
 
 var commands = {
-	repeat: function(parameters) {
-		repeatMessage(parameters);
-	},
 	join: function(parameters, senderNick) {
 		joinGame(senderNick);
 	},
@@ -57,6 +56,18 @@ var commands = {
 	},
 	day: function() {
 		changeDay();
+	}
+};
+
+var adminCommands = {
+	repeat: function(parameters) {
+		repeatMessage(parameters);
+	},
+	mimic: function(parameters) {
+		mimicPlayer(parameters);
+	},
+	unmimic: function(parameters) {
+		mimicPlayer(parameters, true);
 	}
 };
 
@@ -89,6 +100,7 @@ bot.on("message", function(sender, channel, message) {
   if (sender.hostmask == admin) {
 		console.log("Sent From Admin");
 		adminCommand = true;
+		adminNick = sender.nick;
 	}
 
 	if (message.charAt(0) == specialChar) {
@@ -99,6 +111,8 @@ bot.on("message", function(sender, channel, message) {
 
 		if (commands[command] !== undefined) {
 			commands[command](parameters, sender.nick, channel);
+		} else if ((adminCommands[command] !== undefined) && (adminCommand === true)) {
+			adminCommands[command](parameters, sender.nick, channel);
 		} else {
 			console.log("Unknown command from " + sender.nick + ": " + message);
 		}
@@ -333,5 +347,15 @@ function changeDay() {
 	//Transition from night to day
 	if (day === true) {
 		dayNum++;
+	}
+}
+
+function mimicPlayer(player, undo) {
+	if (undo !== true) {
+		mimickedPlayerNick = players[findPlayerTeam(player)][findPlayerTeam(player, true)].nick;
+		players[findPlayerTeam(player)][findPlayerTeam(player, true)].nick = adminNick;
+	} else {
+		players[findPlayerTeam(adminNick)][findPlayerTeam(adminNick, true)].nick = mimickedPlayerNick;
+		mimickedPlayerNick = undefined;
 	}
 }
