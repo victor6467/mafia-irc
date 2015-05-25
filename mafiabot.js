@@ -17,6 +17,7 @@ var day = true;
 var dayNum = 0;
 var mimickedPlayerNick;
 var adminNick;
+var mimickingState = false;
 
 var players = {
 	mafia: [],
@@ -331,11 +332,13 @@ function changeDay() {
 			if (innocent[i].numVotes > maxVotes) {
 				votedPlayer = innocent[i].nick;
 			}
+			innocent[i].voted = false;
 		}
 		for (i = 0; i < mafia.length; i++) {
 			if (mafia[i].numVotes > maxVotes) {
 				votedPlayer = mafia[i].nick;
 			}
+			mafia[i].voted = false;
 		}
 		if (votedPlayer !== undefined) {
 			console.log(votedPlayer + " has been voted to be killed!");
@@ -351,11 +354,13 @@ function changeDay() {
 }
 
 function mimicPlayer(player, undo) {
-	if (undo !== true) {
+	if (undo !== true && mimickingState == false) {
 		mimickedPlayerNick = players[findPlayerTeam(player)][findPlayerTeam(player, true)].nick;
 		players[findPlayerTeam(player)][findPlayerTeam(player, true)].nick = adminNick;
+		mimickingState = true;
 	} else {
 		players[findPlayerTeam(adminNick)][findPlayerTeam(adminNick, true)].nick = mimickedPlayerNick;
 		mimickedPlayerNick = undefined;
+		mimickingState = false;
 	}
 }
