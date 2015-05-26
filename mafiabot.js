@@ -69,6 +69,9 @@ var adminCommands = {
 	},
 	unmimic: function(parameters) {
 		mimicPlayer(parameters, true);
+	},
+	kill: function(parameters) {
+		killPlayer(parameters);
 	}
 };
 
