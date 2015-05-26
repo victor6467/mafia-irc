@@ -264,6 +264,10 @@ function dayVote(player, voter) {
 	if (playerTeam == "mafia" || playerTeam == "innocent") {
 		playerNum = findPlayerTeam(player, true);
 		voterTeam = findPlayerTeam(voter);
+		if (voterTeam != "mafia") {
+			console.log(voter + " is not a player that can vote!");
+			return false;
+		}
 		voterNum = findPlayerTeam(voter, true);
 		if (!players[voterTeam][voterNum].voted) {
 			players[playerTeam][playerNum].numVotes++;
@@ -297,6 +301,10 @@ function nightVote(player, voter) {
 	if (playerTeam == "innocent") {
 		playerNum = findPlayerTeam(player, true);
 		voterTeam = findPlayerTeam(voter);
+		if (!(voterTeam == "mafia" || voterTeam == "innocent")) {
+			console.log(voter + " is not a mafia member!");
+			return false;
+		}
 		voterNum = findPlayerTeam(voter, true);
 		if (!players[voterTeam][voterNum].voted) {
 			players[playerTeam][playerNum].numVotes++;
