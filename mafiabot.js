@@ -354,12 +354,14 @@ function changeDay() {
 }
 
 function mimicPlayer(player, undo) {
-	if (undo !== true && mimickingState == false) {
+	if (undo !== true && mimickingState === false) {
 		mimickedPlayerNick = players[findPlayerTeam(player)][findPlayerTeam(player, true)].nick;
 		players[findPlayerTeam(player)][findPlayerTeam(player, true)].nick = adminNick;
 		mimickingState = true;
+		console.log(adminNick + " has taken over " + mimickedPlayerNick + "'s character for now.");
 	} else {
 		players[findPlayerTeam(adminNick)][findPlayerTeam(adminNick, true)].nick = mimickedPlayerNick;
+		console.log(mimickedPlayerNick + " has regained control of their character.");
 		mimickedPlayerNick = undefined;
 		mimickingState = false;
 	}
