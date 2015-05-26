@@ -123,6 +123,11 @@ bot.on("message", function(sender, channel, message) {
 	}
 });
 
+bot.on("quit", function(user, channels, message) {
+	killPlayer(user.nick);
+	console.log(user.nick + " has left. They will not be able to rejoin this game.");
+});
+
 function repeatMessage(message) {
 	console.log("Sending message to " + mainChannel + ": " + message);
 	bot.message(mainChannel, message);
