@@ -57,6 +57,9 @@ var commands = {
 	},
 	day: function() {
 		changeDay();
+	},
+	eliminate: function(parameters, senderNick, channel) {
+		mafiaEliminate(parameters, senderNick, channel);
 	}
 };
 
@@ -255,9 +258,9 @@ function startGame(parameters) {
 function submitVote(player, voter, channel) {
 	if (channel == mainChannel) {
 		return dayVote(player, voter);
-	} else if (channel == mafiaChannel) {
+	} /*else if (channel == mafiaChannel) {
 		return nightVote(player, voter);
-	}
+	}*/
 }
 
 function dayVote(player, voter) {
@@ -272,7 +275,7 @@ function dayVote(player, voter) {
 	if (playerTeam == "mafia" || playerTeam == "innocent") {
 		playerNum = findPlayerTeam(player, true);
 		voterTeam = findPlayerTeam(voter);
-		if (voterTeam != "mafia") {
+		if (!(voterTeam == "mafia" || voterTeam == "innocent")) {
 			console.log(voter + " is not a player that can vote!");
 			return false;
 		}
@@ -297,7 +300,18 @@ function dayVote(player, voter) {
 	}
 }
 
-function nightVote(player, voter) {
+function mafiaEliminate(player, sender, channel) {
+	if (channel !== mafiaChannel) {
+		return false;
+	} else if (findPlayerTeam(player) !== "innocent") {
+		console.log("You must vote for an innocent player!");
+		return false;
+	}
+	killPlayer(player, "mafia");
+	changeDay();
+}
+
+/*function nightVote(player, voter) {
 	if (day === true) {
 		console.log("You can only vote at night!");
 		return false;
@@ -309,7 +323,7 @@ function nightVote(player, voter) {
 	if (playerTeam == "innocent") {
 		playerNum = findPlayerTeam(player, true);
 		voterTeam = findPlayerTeam(voter);
-		if (!(voterTeam == "mafia" || voterTeam == "innocent")) {
+		if (voterTeam != "mafia") {
 			console.log(voter + " is not a mafia member!");
 			return false;
 		}
@@ -335,7 +349,7 @@ function nightVote(player, voter) {
 		console.log(player + "not found.");
 		return false;
 	}
-}
+}*/
 
 function changeDay() {
 	day = !day;
