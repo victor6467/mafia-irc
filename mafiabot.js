@@ -75,6 +75,9 @@ var adminCommands = {
 	},
 	kill: function(parameters) {
 		killPlayer(parameters);
+	},
+	inv: function(parameters) {
+		mafiaInvite(parameters);
 	}
 };
 
@@ -221,12 +224,14 @@ function startGame(parameters) {
 
 	for (i = 0; i < numMafia; i++) {
 		var chosenMafiaNum = Math.floor(Math.random() * (numPlayers - i));
-		mafia.push({nick:(unassigned[chosenMafiaNum].nick),
+		var mafiaRecruit = unassigned[chosenMafiaNum].nick;
+		mafia.push({nick: mafiaRecruit,
 			godfather: false,
 			protected:	false,
 			voted: false,
 			numVotes: 0
 		});
+		mafiaInvite(mafiaRecruit);
 		unassigned.splice(chosenMafiaNum, 1);
 	}
 
@@ -395,4 +400,9 @@ function mimicPlayer(player, undo) {
 		mimickedPlayerNick = undefined;
 		mimickingState = false;
 	}
+}
+
+function mafiaInvite(player) {
+	//bot.sendLine({"command": "INVITE", "args": [player], tail: mafiaChannel});
+	console.log("\"Invited\" " + player + " to mafia channel.");
 }
